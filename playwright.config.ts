@@ -10,6 +10,7 @@ export default defineConfig({
   reporter: [
     ['html', { open: 'never' }],
     ['list'],
+    ['allure-playwright', { resultsDir: 'allure-results' }],
   ],
   timeout: 60_000,
   expect: { timeout: 10_000 },
