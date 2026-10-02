@@ -21,7 +21,16 @@ interface Pages {
   contactUsPage: ContactUsPage;
 }
 
+// Third-party ad hosts. The site's Google interstitial ("#google_vignette") hijacks navigation and
+// makes clicks land on the ad instead of the intended page, so we never let those requests load.
+const AD_URL_PATTERN =
+  /googlesyndication\.com|doubleclick\.net|googleadservices\.com|adservice\.google\.|googletagmanager\.com|google-analytics\.com|adsbygoogle/;
+
 export const test = base.extend<Pages>({
+  page: async ({ page }, use) => {
+    await page.route(AD_URL_PATTERN, (route) => route.abort());
+    await use(page);
+  },
   homePage: async ({ page }, use) => use(new HomePage(page)),
   loginPage: async ({ page }, use) => use(new LoginPage(page)),
   signupPage: async ({ page }, use) => use(new SignupPage(page)),
